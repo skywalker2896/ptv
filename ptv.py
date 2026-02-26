@@ -27,15 +27,18 @@ def search(query):
     return ptv_api(href)
 
 def departures(route_type, stop_id, route_id):
-    # route_type = 
-    href = f"/v3/departures/route_type/{urllib.parse.quote_plus(route_type).replace('%2F', '/')}/stop/{urllib.parse.quote_plus(stop_id).replace('%2F', '/')}/route/{urllib.parse.quote_plus(route_id).replace('%2F', '/')}"
+    href = f"/v3/departures/route_type/{urllib.parse.quote_plus(str(route_type)).replace('%2F', '/')}/stop/{urllib.parse.quote_plus(str(stop_id)).replace('%2F', '/')}/route/{urllib.parse.quote_plus(str(route_id)).replace('%2F', '/')}"
     return ptv_api(href)
+
 
 if __name__ == '__main__':
     stop_name = input("Please enter a stop name: ")
     stop_info = search(stop_name)
     if stop_info:
         print(stop_info)
-
     
-    departures(stop_info["stops"][0]["stop_id"])
+    route_id = stop_info['stops'][0]['routes'][0]['route_id']
+    stop_id = stop_info['stops'][0]['stop_id']
+    route_type = stop_info['stops'][0]['route_type']
+
+    print(departures(route_type, stop_id, route_id))
